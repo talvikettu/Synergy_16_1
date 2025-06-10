@@ -1,31 +1,53 @@
-﻿class CashRegister:
-    def __init__(self, initial_amount=0):
-        self.balance = initial_amount  
+﻿class Turtle:
+    def __init__(self, x=0, y=0, s=1):
+        self.x = x  # начальная позиция по x
+        self.y = y  # начальная позиция по y
+        self.s = s  # размер шага (количество клеточек за ход)
     
-    def top_up(self, x):
-        if x > 0:
-            self.balance += x
-        else:
-            raise ValueError("Сумма пополнения должна быть положительной")
+    def go_up(self):
+        self.y += self.s
     
-    def count_1000(self):
-        return self.balance // 1000
+    def go_down(self):
+        self.y -= self.s
     
-    def take_away(self, x):
-        if x <= 0:
-            raise ValueError("Сумма изъятия должна быть положительной")
-        if x > self.balance:
-            raise ValueError("Недостаточно денег в кассе")
-        self.balance -= x
-        return x
+    def go_left(self):
+        self.x -= self.s
     
-    def amount_print(self):
-        return f"В кассе: {self.balance} руб."
+    def go_right(self):
+        self.x += self.s
+    
+    def evolve(self):
+        self.s += 1
+    
+    def degrade(self):
 
-kassa = CashRegister(5000)
+        if self.s <= 1:
+            raise ValueError("s не может быть меньше или равно 0")
+        self.s -= 1
+    
+    def count_moves(self, x2, y2):
 
-print(kassa.count_1000())
+        dx = abs(x2 - self.x)
+        dy = abs(y2 - self.y)
+        
 
-print(kassa.take_away(1))
+        steps_x = dx // self.s
+        steps_y = dy // self.s
+        
+        rem_x = dx % self.s
+        rem_y = dy % self.s
+        
+        total_steps = steps_x + steps_y
+        if rem_x != 0:
+            total_steps += 1
+        if rem_y != 0:
+            total_steps += 1
+        
+        return total_steps
+    
+    def __str__(self):
+        return f"Черепашка в позиции ({self.x}, {self.y}), шаг: {self.s}"
 
-print(kassa.amount_print())
+Wise_Turtle = Turtle(0,0)
+
+print(Wise_Turtle.count_moves(3,3))
